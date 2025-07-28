@@ -49,7 +49,7 @@ vim.pack.add{
 -- lsp & diagnostics
 require("diagnostics")
 require("lsp")
-vim.lsp.enable({ "lua_ls", "ruff", "gopls" })
+vim.lsp.enable({ "lua_ls", "ruff", "gopls", "pyright" })
 
 vim.cmd("colorscheme PaperColor")
 vim.cmd("hi statusline guibg=NONE")
