@@ -1,5 +1,10 @@
+vim.g.mapleader = " "
+vim.g.omni_sql_default_compl_type = 'syntax'
+
 -- global options
 vim.o.wrap = false
+vim.o.nu = true
+vim.o.guicursor = ""
 vim.o.splitbelow = true
 vim.o.splitright = true
 vim.o.tabstop = 4
@@ -7,17 +12,58 @@ vim.o.shiftwidth = 4
 vim.o.signcolumn = "yes"
 vim.o.relativenumber = true
 vim.o.winborder = "rounded"
-vim.g.mapleader = " "
-vim.opt.hlsearch = false
-vim.opt.incsearch = true
+vim.o.hlsearch = false
+vim.o.incsearch = true
+vim.o.scrolloff = 999
+vim.o.updatetime = 10
+vim.o.colorcolumn = "0"
+vim.filetype.add {
+    extension = {
+        templ = "templ",
+    },
+}
+vim.opt.termguicolors = true
 
--- plugins
+-- get plugins
 vim.pack.add{
+  { src = 'https://github.com/nvim-treesitter/nvim-treesitter' },
   { src = 'https://github.com/neovim/nvim-lspconfig' },
   { src = 'https://github.com/stevearc/oil.nvim' },
   { src = 'https://github.com/ibhagwan/fzf-lua' },
+  { src = 'https://github.com/lewis6991/gitsigns.nvim' },
+  { src = 'https://github.com/supermaven-inc/supermaven-nvim' },
+  { src = 'https://github.com/vrischmann/tree-sitter-templ' },
+  { src = 'https://github.com/diepm/vim-rest-console' },
 }
+
+-- setup plugins
 require("oil").setup( { view_options = { show_hidden = true } })
+require("gitsigns").setup({
+	signs = {
+		add = { text = "+" },
+		change = { text = "~" },
+		topdelete = { text = '‾' },
+		changedelete = { text = "~" },
+	}
+})
+require("supermaven-nvim").setup({
+	keymaps = {
+		accept_suggestion = "<C-Space>",
+		clear_suggestion = "<C-x>",
+	},
+})
+require("nvim-treesitter").setup({
+	sync_install = false,
+	auto_install = true,
+	highlight = { enable = true },
+	additional_vim_regex_highlighting = false,
+})
+-- TODO: only enable for go and templ files
+require("tree-sitter-templ").setup()
+vim.g.vrc_set_default_mappings = 0
+vim.g.vrc_response_default_content_type = "application/json"
+vim.g.vrc_output_buffer_name = "_OUTPUT.json"
+vim.g.vrc_auto_format_response_patterns = { json = "jq" }
 
 -- commands
 vim.api.nvim_create_user_command('Todos', function()
@@ -25,7 +71,7 @@ vim.api.nvim_create_user_command('Todos', function()
 end, { desc = 'Grep TODOs', nargs = 0 })
 
 vim.api.nvim_create_user_command('Scratch', function()
-    vim.cmd 'bel 10new'
+    vim.cmd('bel 10new')
     local buf = vim.api.nvim_get_current_buf()
     for name, value in pairs {
         filetype = 'scratch',
@@ -73,11 +119,19 @@ vim.keymap.set('n', '<leader>td', '<cmd>Todos<cr>', { desc = "Search TODOs" })
 vim.keymap.set("n", "<leader>cf", "<cmd>:let @+ = expand('%')<CR>", { desc = "Copy current file path" })
 
 -- keybinds (fzf-lua)
-vim.keymap.set("n", "<leader>pf", function() require("fzf-lua").files({
-	cmd = "rg -. -g '!*_mocks.go' -g '!*mocks_test.go' -g '!.git' -g '!**/*.sql.go' -g '!*_templ.go' -g '!_tmp'"	
-}) end, { desc = "Fuzzy find files" })
 vim.keymap.set("n", "<leader>ds", function() require("fzf-lua").lsp_document_symbols() end, { desc = "[LSP] Document symbols" })
 vim.keymap.set("n", "<leader>xx", function() require("fzf-lua").diagnostics_workspace() end, { desc = "[LSP} Fuzzy find workspace diagnostics" })
-vim.keymap.set("n", "<leader>lg", function() require("fzf-lua").live_grep({
+vim.keymap.set("n", "<leader>ps", function() require("fzf-lua").grep() end, { desc = "Grep" })
+vim.keymap.set("n", "<leader>vh", function() require("fzf-lua").help_tags() end, { desc = "Search help" })
+vim.keymap.set("n", "<leader>gf", function() require("fzf-lua").git_files() end, { desc = "Fuzzy find git files" })
+vim.keymap.set("n", "<leader>km", function() require("fzf-lua").keymaps() end, { desc = "Fuzzy find keymaps" })
+vim.keymap.set("n", "<leader>pb", function() require("fzf-lua").buffers() end, { desc = "Fuzzy find buffers" })
+vim.keymap.set("n", "<leader>pf", function() require("fzf-lua").files({
 	cmd = "fd -t f -E '.git' -E '**/*.sql.go' -E '**/*_templ.go' -E '**/*mocks.go' -E '**/*mocks_test.go' -E '_tmp'"
-}) end, { desc = "Live grep" })
+}) end, { desc = "Fuzzy find files" })
+vim.keymap.set("n", "<leader>lg", function() require("fzf-lua").live_grep({
+	cmd = "rg -. -g '!*_mocks.go' -g '!*mocks_test.go' -g '!.git' -g '!**/*.sql.go' -g '!*_templ.go' -g '!_tmp'"
+}) end, { desc = "Grep (live)" })
+
+-- keybinds (vim-rest-console)
+vim.keymap.set("n", "<leader>r", ":call VrcQuery()<CR>", { desc = "Make request - vim rest console" })
