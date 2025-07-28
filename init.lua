@@ -17,6 +17,7 @@ vim.o.incsearch = true
 vim.o.scrolloff = 999
 vim.o.updatetime = 10
 vim.o.colorcolumn = "0"
+vim.o.cmdheight = 0
 vim.filetype.add {
     extension = {
         templ = "templ",
@@ -24,19 +25,36 @@ vim.filetype.add {
 }
 vim.opt.termguicolors = true
 
+-- lsp
+require("diagnostics")
+require("lsp")
+vim.lsp.enable({ "lua_ls", "ruff", "gopls" })
+
 -- get plugins
 vim.pack.add{
-  { src = 'https://github.com/nvim-treesitter/nvim-treesitter' },
-  { src = 'https://github.com/neovim/nvim-lspconfig' },
-  { src = 'https://github.com/stevearc/oil.nvim' },
-  { src = 'https://github.com/ibhagwan/fzf-lua' },
-  { src = 'https://github.com/lewis6991/gitsigns.nvim' },
-  { src = 'https://github.com/supermaven-inc/supermaven-nvim' },
-  { src = 'https://github.com/vrischmann/tree-sitter-templ' },
-  { src = 'https://github.com/diepm/vim-rest-console' },
+  { src = "https://github.com/NLKNguyen/papercolor-theme" },
+  -- { src = "https://github.com/kvrohit/rasmus.nvim" },
+  -- { src = "https://github.com/kepano/flexoki-neovim" },
+  { src = "https://github.com/nvim-treesitter/nvim-treesitter" },
+  { src = "https://github.com/neovim/nvim-lspconfig" },
+  { src = "https://github.com/stevearc/oil.nvim" },
+  { src = "https://github.com/ibhagwan/fzf-lua" },
+  { src = "https://github.com/lewis6991/gitsigns.nvim" },
+  { src = "https://github.com/tpope/vim-fugitive" },
+  { src = "https://github.com/supermaven-inc/supermaven-nvim" },
+  { src = "https://github.com/vrischmann/tree-sitter-templ" },
+  { src = "https://github.com/diepm/vim-rest-console" },
+  { src = "https://github.com/jesses-code-adventures/dotenv.nvim" },
+  { src = "https://github.com/timwmillard/uuid.nvim" },
 }
 
+vim.cmd("colorscheme PaperColor")
+vim.cmd("hi statusline guibg=NONE")
+
 -- setup plugins
+require("dotenv").setup({
+	overrides = { ".env", ".local.env", ".env.local", ".local.mine.env", ".env.mine" },
+})
 require("oil").setup( { view_options = { show_hidden = true } })
 require("gitsigns").setup({
 	signs = {
@@ -102,9 +120,6 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 
--- lsp
-vim.lsp.enable({ "lua_ls", "ruff", "gopls" })
-
 -- keybinds
 vim.keymap.set("n", "-", ":Oil<CR>", { desc = "File explorer (oil)" })
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
@@ -130,8 +145,18 @@ vim.keymap.set("n", "<leader>pf", function() require("fzf-lua").files({
 	cmd = "fd -t f -E '.git' -E '**/*.sql.go' -E '**/*_templ.go' -E '**/*mocks.go' -E '**/*mocks_test.go' -E '_tmp'"
 }) end, { desc = "Fuzzy find files" })
 vim.keymap.set("n", "<leader>lg", function() require("fzf-lua").live_grep({
-	cmd = "rg -. -g '!*_mocks.go' -g '!*mocks_test.go' -g '!.git' -g '!**/*.sql.go' -g '!*_templ.go' -g '!_tmp'"
+	cmd = "rg -. -g '!*_mocks.go' -g '!*mocks_test.go' -g '!.git' -g '!**/*.sql.go' -g '!*_templ.go' -g '!_tmp' --column -n"
 }) end, { desc = "Grep (live)" })
 
 -- keybinds (vim-rest-console)
 vim.keymap.set("n", "<leader>r", ":call VrcQuery()<CR>", { desc = "Make request - vim rest console" })
+
+-- keybinds (uuid.nvim)
+vim.keymap.set("n", "<leader>mid", function() require("uuid").newV4() end, { desc = "Generate UUID" })
+
+-- keybinds (fugitive)
+vim.keymap.set("n", "<leader>gs", ":Git<CR>", { desc = "Open git in fugitive" })
+vim.keymap.set("n", "<leader>Gd", ":Gdiff<CR>", { desc = "Git diff" })
+vim.keymap.set("n", "<leader>Gp", ":Git pull<CR>", { desc = "Git pull" })
+vim.keymap.set("n", "<leader>GP", ":Git push<CR>", { desc = "Git push" })
+vim.keymap.set("n", "<leader>GO", ":Git push -u origin<CR>", { desc = "Git push to origin" })
