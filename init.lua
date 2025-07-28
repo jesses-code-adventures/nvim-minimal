@@ -1,37 +1,40 @@
-vim.g.mapleader = " "
-vim.g.omni_sql_default_compl_type = 'syntax'
+local o = vim.o
+local g = vim.g
+
+g.mapleader = " "
+g.omni_sql_default_compl_type = 'syntax'
 
 -- global options
-vim.o.wrap = false
-vim.o.nu = true
-vim.o.guicursor = ""
-vim.o.splitbelow = true
-vim.o.splitright = true
-vim.o.tabstop = 4
-vim.o.shiftwidth = 4
-vim.o.signcolumn = "yes"
-vim.o.relativenumber = true
-vim.o.winborder = "rounded"
-vim.o.hlsearch = false
-vim.o.incsearch = true
-vim.o.scrolloff = 999
-vim.o.updatetime = 10
-vim.o.colorcolumn = "0"
-vim.o.cmdheight = 0
+o.wrap = false
+o.nu = true
+o.guicursor = ""
+o.splitbelow = true
+o.splitright = true
+o.tabstop = 4
+o.shiftwidth = 4
+o.signcolumn = "yes"
+o.relativenumber = true
+o.winborder = "rounded"
+o.hlsearch = false
+o.incsearch = true
+o.scrolloff = 999
+o.updatetime = 10
+o.colorcolumn = "0"
+o.cmdheight = 0
 vim.filetype.add {
     extension = {
         templ = "templ",
     },
 }
-vim.opt.termguicolors = true
+o.termguicolors = true
 
 -- get plugins
 vim.pack.add{
+  { src = "https://github.com/neovim/nvim-lspconfig" },
+  { src = "https://github.com/nvim-treesitter/nvim-treesitter" },
   { src = "https://github.com/NLKNguyen/papercolor-theme" },
   -- { src = "https://github.com/kvrohit/rasmus.nvim" },
   -- { src = "https://github.com/kepano/flexoki-neovim" },
-  { src = "https://github.com/nvim-treesitter/nvim-treesitter" },
-  { src = "https://github.com/neovim/nvim-lspconfig" },
   { src = "https://github.com/stevearc/oil.nvim" },
   { src = "https://github.com/ibhagwan/fzf-lua" },
   { src = "https://github.com/lewis6991/gitsigns.nvim" },
@@ -80,12 +83,17 @@ require("gitsigns").setup({
 		changedelete = { text = "~" },
 	}
 })
-require("supermaven-nvim").setup({
-	keymaps = {
-		accept_suggestion = "<C-Space>",
-		clear_suggestion = "<C-x>",
-	},
-})
+
+local supermaven_api = require("supermaven-nvim.api")
+if not supermaven_api.is_running() then
+	require("supermaven-nvim").setup({
+		keymaps = {
+			accept_suggestion = "<C-Space>",
+			clear_suggestion = "<C-x>",
+		},
+	})
+end
+
 require("nvim-treesitter").setup({
 	sync_install = false,
 	auto_install = true,
@@ -94,10 +102,10 @@ require("nvim-treesitter").setup({
 })
 -- TODO: only enable for go and templ files
 require("tree-sitter-templ").setup()
-vim.g.vrc_set_default_mappings = 0
-vim.g.vrc_response_default_content_type = "application/json"
-vim.g.vrc_output_buffer_name = "_OUTPUT.json"
-vim.g.vrc_auto_format_response_patterns = { json = "jq" }
+g.vrc_set_default_mappings = 0
+g.vrc_response_default_content_type = "application/json"
+g.vrc_output_buffer_name = "_OUTPUT.json"
+g.vrc_auto_format_response_patterns = { json = "jq" }
 
 -- commands
 vim.api.nvim_create_user_command('Todos', function()
@@ -135,7 +143,6 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     end,
 })
 
-
 -- keybinds
 vim.keymap.set("n", "-", ":Oil<CR>", { desc = "File explorer (oil)" })
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
@@ -144,19 +151,20 @@ vim.keymap.set({ "v" }, "<leader>y", [["+y]], { desc = "Yank to system clipboard
 vim.keymap.set("n", "<leader>yy", [["+Y]], { desc = "Yank line to system clipboard" })
 vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Scroll down and center" })
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Scroll up and center" })
-vim.keymap.set("n", "<leader>gt", [[:vsplit<CR><C-w>L:vertical resize -60<CR>:terminal<CR>]], { desc = "Open terminal in split pane" })
+-- vim.keymap.set("n", "<leader>gt", [[:vsplit<CR><C-w>L:vertical resize -60<CR>:terminal<CR>]], { desc = "Open terminal in split pane" })
+vim.keymap.set("n", "<leader>gt", [[:split<CR><C-w>j:resize 10<CR>:terminal<CR>]], { desc = "Open terminal in split pane" })
 vim.keymap.set('t', '<Esc><Esc>', [[<C-\><C-n>]], { noremap = true, silent = true, desc = "Exit terminal mode" })
 vim.keymap.set('n', '<leader>td', '<cmd>Todos<cr>', { desc = "Search TODOs" })
 vim.keymap.set("n", "<leader>cf", "<cmd>:let @+ = expand('%')<CR>", { desc = "Copy current file path" })
 
 -- keybinds (fzf-lua)
-vim.keymap.set("n", "<leader>ds", function() require("fzf-lua").lsp_document_symbols() end, { desc = "[LSP] Document symbols" })
-vim.keymap.set("n", "<leader>xx", function() require("fzf-lua").diagnostics_workspace() end, { desc = "[LSP} Fuzzy find workspace diagnostics" })
-vim.keymap.set("n", "<leader>ps", function() require("fzf-lua").grep() end, { desc = "Grep" })
-vim.keymap.set("n", "<leader>vh", function() require("fzf-lua").help_tags() end, { desc = "Search help" })
-vim.keymap.set("n", "<leader>gf", function() require("fzf-lua").git_files() end, { desc = "Fuzzy find git files" })
-vim.keymap.set("n", "<leader>km", function() require("fzf-lua").keymaps() end, { desc = "Fuzzy find keymaps" })
-vim.keymap.set("n", "<leader>pb", function() require("fzf-lua").buffers() end, { desc = "Fuzzy find buffers" })
+vim.keymap.set("n", "<leader>ds", function() require("fzf-lua").lsp_document_symbols() end, { desc = "[FZF] LSP Document symbols" })
+vim.keymap.set("n", "<leader>xx", function() require("fzf-lua").diagnostics_workspace() end, { desc = "[FZF] Workspace diagnostics" })
+vim.keymap.set("n", "<leader>ps", function() require("fzf-lua").grep() end, { desc = "[FZF] Grep" })
+vim.keymap.set("n", "<leader>vh", function() require("fzf-lua").help_tags() end, { desc = "[FZF] Search help" })
+vim.keymap.set("n", "<leader>gf", function() require("fzf-lua").git_files() end, { desc = "[FZF] Fuzzy find git files" })
+vim.keymap.set("n", "<leader>km", function() require("fzf-lua").keymaps() end, { desc = "[FZF] Fuzzy find keymaps" })
+vim.keymap.set("n", "<leader>pb", function() require("fzf-lua").buffers() end, { desc = "[FZF] Fuzzy find buffers" })
 vim.keymap.set("n", "<leader>pf", function() require("fzf-lua").files({
 	cmd = "fd -t f -E '.git' -E '**/*.sql.go' -E '**/*_templ.go' -E '**/*mocks.go' -E '**/*mocks_test.go' -E '_tmp'"
 }) end, { desc = "Fuzzy find files" })
