@@ -50,6 +50,7 @@ vim.pack.add{
 
 vim.cmd("colorscheme PaperColor")
 vim.cmd("hi statusline guibg=NONE")
+vim.cmd("hi StatusLineNC guibg=NONE")
 
 -- setup plugins
 require("dotenv").setup({
