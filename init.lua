@@ -25,11 +25,6 @@ vim.filetype.add {
 }
 vim.opt.termguicolors = true
 
--- lsp
-require("diagnostics")
-require("lsp")
-vim.lsp.enable({ "lua_ls", "ruff", "gopls" })
-
 -- get plugins
 vim.pack.add{
   { src = "https://github.com/NLKNguyen/papercolor-theme" },
@@ -48,9 +43,29 @@ vim.pack.add{
   { src = "https://github.com/timwmillard/uuid.nvim" },
 }
 
+-- lsp & diagnostics
+require("diagnostics")
+require("lsp")
+vim.lsp.enable({ "lua_ls", "ruff", "gopls" })
+
 vim.cmd("colorscheme PaperColor")
 vim.cmd("hi statusline guibg=NONE")
 vim.cmd("hi StatusLineNC guibg=NONE")
+
+local lspconfig = require("lspconfig")
+
+lspconfig.lua_ls.setup({
+  settings = {
+    Lua = {
+      diagnostics = {
+        globals = { "bit", "vim", "it", "describe", "before_each", "after_each", "os", "require" },
+      },
+      library = {
+        vim.fn.expand("$VIMRUNTIME/lua"),
+      }
+    }
+  },
+})
 
 -- setup plugins
 require("dotenv").setup({
