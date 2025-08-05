@@ -51,7 +51,7 @@ require('fzf-lua').register_ui_select()
 -- lsp & diagnostics
 require("diagnostics")
 require("lsp")
-vim.lsp.enable({ "lua_ls", "ruff", "gopls", "pyright", "templ", "html", "tailwindcss" })
+vim.lsp.enable({ "lua_ls", "ruff", "gopls", "pyright", "templ", "html", "tailwindcss", "ts_ls" })
 
 vim.cmd("colorscheme PaperColor")
 vim.cmd("hi statusline guibg=NONE")
@@ -70,6 +70,17 @@ lspconfig.lua_ls.setup({
 			}
 		}
 	},
+})
+
+lspconfig.html.setup({
+  filetypes = { "html", "templ" },
+  on_attach = function(client, bufnr)
+    -- Only disable formatting for templ files, keep it for html files
+    if vim.bo[bufnr].filetype == "templ" then
+      client.server_capabilities.documentFormattingProvider = false
+      client.server_capabilities.documentRangeFormattingProvider = false
+    end
+  end,
 })
 
 -- setup plugins
@@ -157,7 +168,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 vim.keymap.set("n", "-", ":Oil<CR>", { desc = "File explorer (oil)" })
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
-vim.keymap.set({ "v" }, "<leader>y", [["+y]], { desc = "Yank to system clipboard" })
+vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]], { desc = "Yank to system clipboard" })
 vim.keymap.set("n", "<leader>yy", [["+Y]], { desc = "Yank line to system clipboard" })
 vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Scroll down and center" })
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Scroll up and center" })
