@@ -46,6 +46,8 @@ vim.pack.add {
 	{ src = "https://github.com/timwmillard/uuid.nvim" },
 }
 
+require('fzf-lua').register_ui_select()
+
 -- lsp & diagnostics
 require("diagnostics")
 require("lsp")
