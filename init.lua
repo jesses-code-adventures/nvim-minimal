@@ -21,12 +21,14 @@ o.scrolloff = 999
 o.updatetime = 10
 o.colorcolumn = "0"
 o.cmdheight = 0
-vim.filetype.add {
+o.termguicolors = true
+
+vim.filetype.add({
 	extension = {
 		templ = "templ",
+		prisma = "prisma",
 	},
-}
-o.termguicolors = true
+})
 
 -- get plugins
 vim.pack.add {
@@ -44,12 +46,13 @@ vim.pack.add {
 	{ src = "https://github.com/diepm/vim-rest-console" },
 	{ src = "https://github.com/jesses-code-adventures/dotenv.nvim" },
 	{ src = "https://github.com/timwmillard/uuid.nvim" },
+	{ src = "https://github.com/sbdchd/neoformat" },
 }
 
 -- lsp & diagnostics
 require("diagnostics")
 require("lsp")
-vim.lsp.enable({ "lua_ls", "ruff", "gopls", "pyright", "templ", "html", "tailwindcss", "ts_ls" })
+vim.lsp.enable({ "lua_ls", "ruff", "gopls", "pyright", "templ", "html", "tailwindcss", "ts_ls", "prismals", "vue" })
 
 vim.cmd("colorscheme PaperColor")
 vim.cmd("hi statusline guibg=NONE")
@@ -71,14 +74,14 @@ lspconfig.lua_ls.setup({
 })
 
 lspconfig.html.setup({
-  filetypes = { "html", "templ" },
-  on_attach = function(client, bufnr)
-    -- Only disable formatting for templ files, keep it for html files
-    if vim.bo[bufnr].filetype == "templ" then
-      client.server_capabilities.documentFormattingProvider = false
-      client.server_capabilities.documentRangeFormattingProvider = false
-    end
-  end,
+	filetypes = { "html", "templ" },
+	on_attach = function(client, bufnr)
+		-- Only disable formatting for templ files, keep it for html files
+		if vim.bo[bufnr].filetype == "templ" then
+			client.server_capabilities.documentFormattingProvider = false
+			client.server_capabilities.documentRangeFormattingProvider = false
+		end
+	end,
 })
 
 -- setup plugins
@@ -119,6 +122,11 @@ g.vrc_output_buffer_name = "_OUTPUT.json"
 g.vrc_auto_format_response_patterns = { json = "jq" }
 g.vrc_show_command = 1
 
+-- Neoformat
+-- allow local prettier config
+g.neoformat_try_node_exe = 1
+g.neoformat_only_msg_on_error = 1
+
 -- commands
 vim.api.nvim_create_user_command('Todos', function()
 	require('fzf-lua').grep { search = [[TODO:|todo!\(.*\)|HACK:|hack!\(.*\)]], no_esc = true }
@@ -143,10 +151,10 @@ vim.cmd([[
 ]])
 
 vim.api.nvim_create_autocmd('FileType', {
-  pattern = 'templ',
-  callback = function()
-    vim.treesitter.start()
-  end,
+	pattern = { 'templ', 'prisma' },
+	callback = function()
+		vim.treesitter.start()
+	end,
 })
 
 -- when yanking, highlight the yanked text
@@ -177,8 +185,22 @@ vim.keymap.set('t', '<Esc><Esc>', [[<C-\><C-n>]], { noremap = true, silent = tru
 vim.keymap.set('n', '<leader>td', '<cmd>Todos<cr>', { desc = "Search TODOs" })
 vim.keymap.set("n", "<leader>cf", "<cmd>:let @+ = expand('%')<CR>", { desc = "Copy current file path" })
 
+local function prettier_filetype()
+	return vim.bo.filetype == "javascript" or
+		vim.bo.filetype == "typescript" or
+		vim.bo.filetype == "javascriptreact" or
+		vim.bo.filetype == "typescriptreact" or
+		vim.bo.filetype == "vue"
+end
+
 -- keybinds (lsp)
-vim.keymap.set("n", "<leader>F", function() vim.lsp.buf.format { async = true } end, { desc = "Format buffer" })
+vim.keymap.set("n", "<leader>F", function()
+	if prettier_filetype() then
+		vim.cmd("Neoformat prettier")
+		return
+	end
+	vim.lsp.buf.format { async = true }
+end, { desc = "Format buffer" })
 
 -- keybinds (fzf-lua)
 vim.keymap.set("n", "<leader>ds", function() require("fzf-lua").lsp_document_symbols() end,
