@@ -49,10 +49,12 @@ vim.pack.add {
 	{ src = "https://github.com/sbdchd/neoformat" },
 }
 
+require('fzf-lua').register_ui_select()
+
 -- lsp & diagnostics
 require("diagnostics")
 require("lsp")
-vim.lsp.enable({ "lua_ls", "ruff", "gopls", "pyright", "templ", "html", "tailwindcss", "ts_ls", "prismals", "vue" })
+vim.lsp.enable({ "lua_ls", "ruff", "gopls", "pyright", "templ", "html", "tailwindcss", "prismals", "vtsls", "vue_ls" })
 
 vim.cmd("colorscheme PaperColor")
 vim.cmd("hi statusline guibg=NONE")
@@ -73,8 +75,12 @@ lspconfig.lua_ls.setup({
 	},
 })
 
+lspconfig.vtsls.setup({
+	filetypes = { "typescript", "typescriptreact", "vue", "javascript", "javascriptreact" },
+})
+
 lspconfig.html.setup({
-	filetypes = { "html", "templ" },
+	filetypes = { "html", "templ", "vue" },
 	on_attach = function(client, bufnr)
 		-- Only disable formatting for templ files, keep it for html files
 		if vim.bo[bufnr].filetype == "templ" then
