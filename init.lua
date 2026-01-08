@@ -62,7 +62,7 @@ vim.pack.add {
 	{ src = "https://github.com/nvim-neotest/neotest", data = {
 
 	}},
-	{ src = vim.fn.expand("~/coding/personal/nvim-pipeline") },
+	{ src = vim.fn.expand("~/coding/personal/pipeline.nvim") },
 }
 
 vim.cmd("colorscheme PaperColor")
@@ -73,8 +73,8 @@ require('fzf-lua').register_ui_select()
 
 -- setup local plugins (force reload from source on every startup)
 local function force_reload_local_plugin()
-	local plugin_name = "nvim-pipeline"
-	local plugin_source = vim.fn.expand("~/coding/personal/nvim-pipeline")
+	local plugin_name = "pipeline.nvim"
+	local plugin_source = vim.fn.expand("~/coding/personal/pipeline.nvim")
 	local install_path = vim.fn.stdpath("data") .. "/site/pack/core/opt/" .. plugin_name
 
 	-- Clear from Lua cache first
@@ -345,7 +345,7 @@ end, { desc = "Fuzzy find files" })
 vim.keymap.set("n", "<leader>lg", function()
 	require("fzf-lua").live_grep({
 		cmd =
-		"rg -. -g '!*_mocks.go' -g '!*mocks_test.go' -g '!.git' -g '!**/*.sql.go' -g '!*_templ.go' -g '!_tmp' --column -n"
+		"rg -. -g '!*_mocks.go' -g '!*mocks_test.go' -g '!.git' -g '!**/*.sql.go' -g '!*_templ.go' -g '!_tmp' -g '!*.svg' --column -n"
 	})
 end, { desc = "Grep (live)" })
 
