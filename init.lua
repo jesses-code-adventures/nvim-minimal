@@ -185,7 +185,7 @@ end, { desc = "Fuzzy find files" })
 vim.keymap.set("n", "<leader>lg", function()
 	require("fzf-lua").live_grep({
 		cmd =
-		"rg -. -g '!*_mocks.go' -g '!*mocks_test.go' -g '!.git' -g '!**/*.sql.go' -g '!*_templ.go' -g '!_tmp' --column -n"
+		"rg -. -g '!*_mocks.go' -g '!*mocks_test.go' -g '!.git' -g '!**/*.sql.go' -g '!*_templ.go' -g '!_tmp' -g '!*.svg' --column -n"
 	})
 end, { desc = "Grep (live)" })
 
