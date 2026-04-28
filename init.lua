@@ -63,6 +63,7 @@ vim.pack.add {
 
 	}},
 	{ src = vim.fn.expand("~/coding/personal/pipeline.nvim") },
+	{ src = "https://github.com/sindrets/diffview.nvim" },
 }
 
 vim.cmd("colorscheme PaperColor")
@@ -70,6 +71,9 @@ vim.cmd("hi statusline guibg=NONE")
 vim.cmd("hi StatusLineNC guibg=NONE")
 
 require('fzf-lua').register_ui_select()
+require('diffview').setup({
+	use_icons = false,
+})
 
 -- setup local plugins (force reload from source on every startup)
 local function force_reload_local_plugin()
@@ -108,8 +112,6 @@ local function force_reload_local_plugin()
 	require('pipeline').setup({
 		exclude_organisations = { '' },
 	})
-
-	vim.notify("Loaded fresh plugin from source", vim.log.levels.INFO)
 end
 
 force_reload_local_plugin()
@@ -117,7 +119,7 @@ force_reload_local_plugin()
 -- lsp & diagnostics
 require("diagnostics")
 require("lsp")
-vim.lsp.enable({ "lua_ls", "ruff", "gopls", "pyright", "templ", "html", "tailwindcss", "prismals", "clangd" })
+vim.lsp.enable({ "lua_ls", "ruff", "gopls", "pyright", "templ", "html", "tailwindcss", "prismals", "clangd", "rust_analyzer"  })
 
 local lspconfig = require("lspconfig")
 
@@ -361,3 +363,6 @@ vim.keymap.set("n", "<leader>Gd", ":Gdiff<CR>", { desc = "Git diff" })
 vim.keymap.set("n", "<leader>Gp", ":Git pull<CR>", { desc = "Git pull" })
 vim.keymap.set("n", "<leader>GP", ":Git push<CR>", { desc = "Git push" })
 vim.keymap.set("n", "<leader>GO", ":Git push -u origin<CR>", { desc = "Git push to origin" })
+
+-- keybinds (diffview)
+vim.keymap.set("n", "<leader>dv", ":DiffviewOpen HEAD...origin/main<CR>", { desc = "Open diffview" })
