@@ -45,6 +45,7 @@ vim.pack.add {
 	{ src = "https://github.com/antoinemadec/FixCursorHold.nvim" }, -- depended on by neotest
 	{ src = "https://github.com/sbdchd/neoformat" },
 	{ src = "https://github.com/fredrikaverpil/neotest-golang" },
+	{ src = "https://github.com/folke/trouble.nvim" },
 	{ src = "https://github.com/nvim-neotest/neotest", data = { } },
 	{ src = vim.fn.expand("~/coding/personal/pipeline.nvim") },
 }
@@ -172,6 +173,12 @@ vim.keymap.set("n", "<leader>ds", function() require("fzf-lua").lsp_document_sym
 	{ desc = "[FZF] LSP Document symbols" })
 vim.keymap.set("n", "<leader>xx", function() require("fzf-lua").diagnostics_workspace() end,
 	{ desc = "[FZF] Workspace diagnostics" })
+vim.keymap.set("n", "<leader>xf", function()
+	vim.diagnostic.setqflist({ severity = { min = vim.diagnostic.severity.WARN }, open = false })
+	require("trouble").open("qflist")
+end, { desc = "[Trouble] Warnings & errors quickfix" })
+vim.keymap.set("n", "]x", "<cmd>cnext<CR>zz", { desc = "Next warning/error (quickfix)" })
+vim.keymap.set("n", "[x", "<cmd>cprev<CR>zz", { desc = "Prev warning/error (quickfix)" })
 vim.keymap.set("n", "<leader>ps", function() require("fzf-lua").grep() end, { desc = "[FZF] Grep" })
 vim.keymap.set("n", "<leader>vh", function() require("fzf-lua").help_tags() end, { desc = "[FZF] Search help" })
 vim.keymap.set("n", "<leader>gf", function() require("fzf-lua").git_files() end, { desc = "[FZF] Fuzzy find git files" })
