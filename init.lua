@@ -48,6 +48,7 @@ vim.pack.add {
 	{ src = "https://github.com/folke/trouble.nvim" },
 	{ src = "https://github.com/nvim-neotest/neotest", data = { } },
 	{ src = vim.fn.expand("~/coding/personal/pipeline.nvim") },
+	{ src = "https://github.com/sindrets/diffview.nvim" },
 }
 
 vim.cmd("colorscheme PaperColor")
@@ -99,6 +100,8 @@ lspconfig.html.setup({
 })
 
 -- setup plugins
+require("diffview").setup()
+
 require("dotenv").setup({
 	overrides = { ".env", ".local.env", ".env.local", ".local.mine.env", ".env.mine" },
 })
