@@ -18,11 +18,11 @@ vim.api.nvim_create_user_command('Scratch', function()
 end, { desc = 'Open a scratch buffer', nargs = 0 })
 
 vim.api.nvim_create_user_command('Dom', function()
-	vim.cmd('DiffviewOpen origin/main...')
+	vim.cmd('DiffviewOpen origin/main...HEAD')
 end, { desc = 'Diffview against origin/main', nargs = 0 })
 
 vim.api.nvim_create_user_command('Dm', function()
-	vim.cmd('DiffviewOpen main...')
+	vim.cmd('DiffviewOpen main...HEAD')
 end, { desc = 'Diffview against main', nargs = 0 })
 
 vim.api.nvim_create_user_command('Dc', function()
