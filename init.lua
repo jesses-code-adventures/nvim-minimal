@@ -56,6 +56,9 @@ vim.cmd("hi statusline guibg=NONE")
 vim.cmd("hi StatusLineNC guibg=NONE")
 
 require('fzf-lua').register_ui_select()
+require('diffview').setup({
+	use_icons = false,
+})
 
 -- lsp & diagnostics
 require("diagnostics")
@@ -211,3 +214,6 @@ vim.keymap.set("n", "<leader>Gd", ":Gdiff<CR>", { desc = "Git diff" })
 vim.keymap.set("n", "<leader>Gp", ":Git pull<CR>", { desc = "Git pull" })
 vim.keymap.set("n", "<leader>GP", ":Git push<CR>", { desc = "Git push" })
 vim.keymap.set("n", "<leader>GO", ":Git push -u origin<CR>", { desc = "Git push to origin" })
+
+-- keybinds (diffview)
+vim.keymap.set("n", "<leader>dv", ":DiffviewOpen HEAD...origin/main<CR>", { desc = "Open diffview" })
