@@ -28,3 +28,26 @@ end, { desc = 'Diffview against main', nargs = 0 })
 vim.api.nvim_create_user_command('Dc', function()
 	vim.cmd('DiffviewClose')
 end, { desc = 'Close Diffview', nargs = 0 })
+
+local function muted_diff_highlights()
+	local highlights = {
+		DiffAdd = { bg = "#26332b" },
+		DiffChange = { bg = "#2f2f24" },
+		DiffDelete = { bg = "#332626", fg = "#8a6f6f" },
+		DiffText = { bg = "#3a3726" },
+		Folded = { bg = "#2b2923", fg = "#d7af5f" },
+		FoldColumn = { bg = "#1c1c1c", fg = "#d7af5f" },
+		TabLineSel = { bg = "#d7af5f", fg = "#1c1c1c" },
+		DiffviewDiffAddAsDelete = { bg = "#332626", fg = "#8a6f6f" },
+		DiffviewDiffDelete = { fg = "#5f5f5f" },
+		DiffviewFilePanelInsertions = { fg = "#87a987" },
+		DiffviewFilePanelDeletions = { fg = "#a98787" },
+	}
+
+	for group, attrs in pairs(highlights) do
+		vim.api.nvim_set_hl(0, group, attrs)
+	end
+end
+
+muted_diff_highlights()
+vim.api.nvim_create_autocmd("ColorScheme", { callback = muted_diff_highlights })
