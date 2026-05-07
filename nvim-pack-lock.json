@@ -1,0 +1,124 @@
+{
+  "plugins": {
+    "99": {
+      "rev": "8c951feda81c29902c2a0e2f85cb73a07cf42f3e",
+      "src": "https://github.com/ThePrimeagen/99"
+    },
+    "FixCursorHold.nvim": {
+      "rev": "1900f89dc17c603eec29960f57c00bd9ae696495",
+      "src": "https://github.com/antoinemadec/FixCursorHold.nvim"
+    },
+    "diagram.nvim": {
+      "rev": "89d8110ec15021ac9a03ff2317d27b900c45bf60",
+      "src": "https://github.com/3rd/diagram.nvim"
+    },
+    "diffview.nvim": {
+      "rev": "4516612fe98ff56ae0415a259ff6361a89419b0a",
+      "src": "https://github.com/sindrets/diffview.nvim"
+    },
+    "dotenv.nvim": {
+      "rev": "e43aedfa06fb1921b7b23697a1e4c93363967f35",
+      "src": "https://github.com/jesses-code-adventures/dotenv.nvim"
+    },
+    "flexoki-neovim": {
+      "rev": "8899dab435d8c82329397ca224e63b129a21e1e6",
+      "src": "https://github.com/kepano/flexoki-neovim"
+    },
+    "fzf-lua": {
+      "rev": "c9a2deb7bf2d8deaf56a229ff9c7bfeffa8d7d53",
+      "src": "https://github.com/ibhagwan/fzf-lua"
+    },
+    "gitsigns.nvim": {
+      "rev": "b01433169be710d6c69f7b4ee264d9670698b831",
+      "src": "https://github.com/lewis6991/gitsigns.nvim"
+    },
+    "go.nvim": {
+      "rev": "28d9618bfe4385d3af60fed15a4c9f9445ae1f10",
+      "src": "https://github.com/ray-x/go.nvim"
+    },
+    "harpoon": {
+      "rev": "1bc17e3e42ea3c46b33c0bbad6a880792692a1b3",
+      "src": "https://github.com/ThePrimeagen/harpoon"
+    },
+    "image.nvim": {
+      "rev": "da2be65c153ba15a14a342b05591652a6df70d58",
+      "src": "https://github.com/3rd/image.nvim"
+    },
+    "llm.nvim": {
+      "rev": "4d6755379a6de2e090ef0c7add84fa2ee385152f",
+      "src": "https://github.com/jesses-code-adventures/llm.nvim"
+    },
+    "neoformat": {
+      "rev": "2b11fb9fa383636de5de9ecc7c989436c4e0f9d1",
+      "src": "https://github.com/sbdchd/neoformat"
+    },
+    "neotest": {
+      "rev": "deadfb1af5ce458742671ad3a013acb9a6b41178",
+      "src": "https://github.com/nvim-neotest/neotest"
+    },
+    "neotest-golang": {
+      "rev": "b982da5f39980797c1bdec875d688a302245f31f",
+      "src": "https://github.com/fredrikaverpil/neotest-golang"
+    },
+    "nvim-lspconfig": {
+      "rev": "4d3b3bb8815fbe37bcaf3dbdb12a22382bc11ebe",
+      "src": "https://github.com/neovim/nvim-lspconfig"
+    },
+    "nvim-nio": {
+      "rev": "21f5324bfac14e22ba26553caf69ec76ae8a7662",
+      "src": "https://github.com/nvim-neotest/nvim-nio"
+    },
+    "nvim-treesitter": {
+      "rev": "42fc28ba918343ebfd5565147a42a26580579482",
+      "src": "https://github.com/nvim-treesitter/nvim-treesitter"
+    },
+    "oil.nvim": {
+      "rev": "bbad9a76b2617ce1221d49619e4e4b659b3c61fc",
+      "src": "https://github.com/stevearc/oil.nvim"
+    },
+    "papercolor-theme": {
+      "rev": "0cfe64ffb24c21a6101b5f994ca342a74c977aef",
+      "src": "https://github.com/NLKNguyen/papercolor-theme"
+    },
+    "pipeline.nvim": {
+      "rev": "13d15af624d89ec9e9be96f5bea32df4c4b58ce1",
+      "src": "https://github.com/jesses-code-adventures/pipeline.nvim.git"
+    },
+    "plenary.nvim": {
+      "rev": "b9fd5226c2f76c951fc8ed5923d85e4de065e509",
+      "src": "https://github.com/nvim-lua/plenary.nvim"
+    },
+    "rasmus.nvim": {
+      "rev": "49f7ee7bf3eb00db52c77f84b15bc69f318bafc1",
+      "src": "https://github.com/kvrohit/rasmus.nvim"
+    },
+    "supermaven-nvim": {
+      "rev": "07d20fce48a5629686aefb0a7cd4b25e33947d50",
+      "src": "https://github.com/supermaven-inc/supermaven-nvim"
+    },
+    "tree-sitter-templ": {
+      "rev": "47594c5cbef941e6a3ccf4ddb934a68cf4c68075",
+      "src": "https://github.com/vrischmann/tree-sitter-templ"
+    },
+    "trouble.nvim": {
+      "rev": "bd67efe408d4816e25e8491cc5ad4088e708a69a",
+      "src": "https://github.com/folke/trouble.nvim"
+    },
+    "uuid.nvim": {
+      "rev": "34db01da4ce56a1a7de4fb8840982a9e95ad009d",
+      "src": "https://github.com/timwmillard/uuid.nvim"
+    },
+    "vim-fugitive": {
+      "rev": "61b51c09b7c9ce04e821f6cf76ea4f6f903e3cf4",
+      "src": "https://github.com/tpope/vim-fugitive"
+    },
+    "vim-go": {
+      "rev": "e6788d124a564b049f3d80bef984e8bd5281286d",
+      "src": "https://github.com/fatih/vim-go"
+    },
+    "vim-rest-console": {
+      "rev": "7b407f47185468d1b57a8bd71cdd66c9a99359b2",
+      "src": "https://github.com/diepm/vim-rest-console"
+    }
+  }
+}

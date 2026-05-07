@@ -39,7 +39,7 @@ vim.diagnostic.config {
         end,
     },
     -- Disable signs in the gutter.
-    signs = false,
+    signs = { severity = {} },
 }
 
 -- Define the diagnostic signs.
