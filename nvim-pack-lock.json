@@ -12,6 +12,10 @@
       "rev": "89d8110ec15021ac9a03ff2317d27b900c45bf60",
       "src": "https://github.com/3rd/diagram.nvim"
     },
+    "diffview-pr.nvim": {
+      "rev": "6d3afb8b1e01da1a17bdf9776a1ab0ded076aa07",
+      "src": "https://github.com/jesses-code-adventures/diffview-pr.nvim"
+    },
     "diffview.nvim": {
       "rev": "4516612fe98ff56ae0415a259ff6361a89419b0a",
       "src": "https://github.com/dlyongemallo/diffview.nvim"

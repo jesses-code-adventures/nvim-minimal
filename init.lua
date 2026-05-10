@@ -68,7 +68,6 @@ vim.pack.add {
 	-- { src = vim.fn.expand("~/coding/personal/pipeline.nvim") },
 	{ src = "https://github.com/dlyongemallo/diffview.nvim" },
 	{ src = "https://github.com/nvim-tree/nvim-web-devicons" },
-	-- { src = vim.fn.expand("~/coding/personal/diffview-pr.nvim") },
 }
 
 vim.cmd("colorscheme PaperColor")
@@ -76,7 +75,14 @@ vim.cmd("hi statusline guibg=NONE")
 vim.cmd("hi StatusLineNC guibg=NONE")
 
 require('fzf-lua').register_ui_select()
-vim.opt.runtimepath:prepend(vim.fn.expand("~/coding/personal/diffview-pr.nvim"))
+
+local dev_diffview_pr = false
+if dev_diffview_pr then
+	vim.opt.runtimepath:prepend(vim.fn.expand("~/coding/personal/diffview-pr.nvim"))
+else
+	vim.pack.add({ src = "https://github.com/jesses-code-adventures/diffview-pr.nvim" })
+end
+
 require("dv")
 
 -- lsp & diagnostics
