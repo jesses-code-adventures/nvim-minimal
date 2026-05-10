@@ -29,19 +29,63 @@ vim.api.nvim_create_user_command('Dc', function()
 	vim.cmd('DiffviewClose')
 end, { desc = 'Close Diffview', nargs = 0 })
 
-local function muted_diff_highlights()
+-- vim.api.nvim_create_user_command('DiffviewPRComment', function(args)
+-- 	local ok, pr = pcall(require, 'diffview_pr_comment')
+-- 	if not ok then
+-- 		vim.notify('diffview-pr.nvim is not available', vim.log.levels.WARN)
+-- 		return
+-- 	end
+-- 	pr.open(args.line1, args.line2)
+-- end, { desc = 'Create a GitHub PR comment from a Diffview selection', range = true })
+--
+-- vim.api.nvim_create_user_command('DiffviewPRCommentsRefresh', function()
+-- 	local ok, pr = pcall(require, 'diffview_pr_comment')
+-- 	if not ok then
+-- 		vim.notify('diffview-pr.nvim is not available', vim.log.levels.WARN)
+-- 		return
+-- 	end
+-- 	pr.refresh()
+-- end, { desc = 'Refresh GitHub PR comments in Diffview', nargs = 0 })
+--
+-- vim.api.nvim_create_user_command('DiffviewPRDebug', function()
+-- 	local ok, pr = pcall(require, 'diffview_pr_comment')
+-- 	if not ok then
+-- 		vim.notify('diffview-pr.nvim is not available', vim.log.levels.WARN)
+-- 		return
+-- 	end
+-- 	pr.debug_state()
+-- end, { desc = 'Print Diffview PR plugin state', nargs = 0 })
+
+local function github_diff_highlights()
 	local highlights = {
-		DiffAdd = { bg = "#26332b" },
-		DiffChange = { bg = "#2f2f24" },
-		DiffDelete = { bg = "#332626", fg = "#8a6f6f" },
-		DiffText = { bg = "#3a3726" },
-		Folded = { bg = "#2b2923", fg = "#d7af5f" },
-		FoldColumn = { bg = "#1c1c1c", fg = "#d7af5f" },
-		TabLineSel = { bg = "#d7af5f", fg = "#1c1c1c" },
-		DiffviewDiffAddAsDelete = { bg = "#332626", fg = "#8a6f6f" },
-		DiffviewDiffDelete = { fg = "#5f5f5f" },
+		DiffAdd = { bg = "#1f3d2a", fg = "#b7dfb9" },
+		DiffChange = { bg = "#3a2f1f" },
+		DiffDelete = { bg = "#4a2528", fg = "#e8b9b7" },
+		DiffText = { bg = "#5a4724", fg = "#eadca6" },
+		Folded = { bg = "#161b22", fg = "#8b949e" },
+		FoldColumn = { bg = "#0d1117", fg = "#8b949e" },
+		TabLineSel = { bg = "#bc5215", fg = "#100f0f" },
+		diffAdded = { fg = "#87a987" },
+		diffRemoved = { fg = "#bf8f8f" },
+		diffChanged = { fg = "#d29922" },
+		DiffviewNormal = { fg = "#c9d1d9" },
+		DiffviewCursorLine = { bg = "#2a2f36" },
+		DiffviewFilePanelTitle = { fg = "#8b949e", bold = true },
+		DiffviewFilePanelFileName = { fg = "#c9d1d9" },
+		DiffviewFilePanelSelected = { fg = "#ffffff", bold = true },
+		DiffviewFilePanelPath = { fg = "#8b949e" },
 		DiffviewFilePanelInsertions = { fg = "#87a987" },
-		DiffviewFilePanelDeletions = { fg = "#a98787" },
+		DiffviewFilePanelDeletions = { fg = "#bf8f8f" },
+		DiffviewDiffAdd = { bg = "#1f3d2a", fg = "#b7dfb9" },
+		DiffviewDiffChange = { bg = "#3a2f1f" },
+		DiffviewDiffChangeAdd = { bg = "#1f3d2a", fg = "#b7dfb9" },
+		DiffviewDiffChangeDelete = { bg = "#4a2528", fg = "#e8b9b7" },
+		DiffviewDiffText = { bg = "#5a4724", fg = "#eadca6" },
+		DiffviewDiffTextAdd = { bg = "#2d5a3a", fg = "#e6f4e8" },
+		DiffviewDiffTextDelete = { bg = "#6b3036", fg = "#f4e1e1" },
+		DiffviewDiffAddAsDelete = { bg = "#4a2528", fg = "#e8b9b7" },
+		DiffviewDiffDelete = { bg = "#4a2528", fg = "#e8b9b7" },
+		DiffviewDiffDeleteDim = { bg = "NONE", fg = "NONE" },
 	}
 
 	for group, attrs in pairs(highlights) do
@@ -49,5 +93,5 @@ local function muted_diff_highlights()
 	end
 end
 
-muted_diff_highlights()
-vim.api.nvim_create_autocmd("ColorScheme", { callback = muted_diff_highlights })
+github_diff_highlights()
+vim.api.nvim_create_autocmd("ColorScheme", { callback = github_diff_highlights })

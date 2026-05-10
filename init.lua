@@ -4,6 +4,24 @@ local g = vim.g
 g.mapleader = " "
 g.omni_sql_default_compl_type = 'syntax'
 
+do
+	local orig_deprecate = vim.deprecate
+	vim.deprecate = function(name, alt, version, plugin, backtrace)
+		if name and name:match("client%.stop") then
+			local callsite = debug.traceback("", 2)
+			local bt = backtrace and ("\nvim.deprecate backtrace:\n" .. tostring(backtrace)) or ""
+			vim.schedule(function()
+				vim.notify(
+					("DEPRECATION: %s -> %s\n%s%s"):format(name, alt or "?", callsite, bt),
+					vim.log.levels.WARN
+				)
+			end)
+		end
+
+		return orig_deprecate(name, alt, version, plugin, backtrace)
+	end
+end
+
 -- global options
 o.wrap = false
 o.nu = true
@@ -30,7 +48,7 @@ vim.opt.completeopt = { "menuone", "noselect" }
 vim.pack.add {
 	{ src = "https://github.com/nvim-lua/plenary.nvim" }, -- depended on by neotest
 	{ src = "https://github.com/neovim/nvim-lspconfig" },
-	{ src = "https://github.com/nvim-treesitter/nvim-treesitter" },
+	{ src = "https://github.com/nvim-treesitter/nvim-treesitter",   version = "main" },
 	{ src = "https://github.com/NLKNguyen/papercolor-theme" },
 	{ src = "https://github.com/stevearc/oil.nvim" },
 	{ src = "https://github.com/ibhagwan/fzf-lua" },
@@ -46,9 +64,11 @@ vim.pack.add {
 	{ src = "https://github.com/sbdchd/neoformat" },
 	{ src = "https://github.com/fredrikaverpil/neotest-golang" },
 	{ src = "https://github.com/folke/trouble.nvim" },
-	{ src = "https://github.com/nvim-neotest/neotest", data = { } },
-	{ src = vim.fn.expand("~/coding/personal/pipeline.nvim") },
-	{ src = "https://github.com/sindrets/diffview.nvim" },
+	{ src = "https://github.com/nvim-neotest/neotest",              data = {} },
+	-- { src = vim.fn.expand("~/coding/personal/pipeline.nvim") },
+	{ src = "https://github.com/dlyongemallo/diffview.nvim" },
+	{ src = "https://github.com/nvim-tree/nvim-web-devicons" },
+	-- { src = vim.fn.expand("~/coding/personal/diffview-pr.nvim") },
 }
 
 vim.cmd("colorscheme PaperColor")
@@ -56,9 +76,8 @@ vim.cmd("hi statusline guibg=NONE")
 vim.cmd("hi StatusLineNC guibg=NONE")
 
 require('fzf-lua').register_ui_select()
-require('diffview').setup({
-	use_icons = false,
-})
+vim.opt.runtimepath:prepend(vim.fn.expand("~/coding/personal/diffview-pr.nvim"))
+require("dv")
 
 -- lsp & diagnostics
 require("diagnostics")
@@ -68,20 +87,29 @@ require("custom_commands")
 require("autocmds")
 
 -- Load local plugins that are in development
-Force_reload_local_plugin()
-
-vim.lsp.enable({ "lua_ls", "ruff", "gopls", "templ", "html", "tailwindcss", "prismals", "clangd", "ty", "rust_analyzer" }) -- note: pyright currently disabled in favour of ty
+-- Force_reload_local_plugin()
 
 local lspconfig = require("lspconfig")
 
 lspconfig.lua_ls.setup({
 	settings = {
 		Lua = {
+			runtime = { version = "Lua 5.1" },
 			diagnostics = {
 				globals = { "bit", "vim", "it", "describe", "before_each", "after_each", "os", "require" },
 			},
 			library = {
 				vim.fn.expand("$VIMRUNTIME/lua"),
+				vim.fn.expand("lua/lsp.lua"),
+				vim.fn.expand("$XDG_DATA_HOME/nvim/lazy/blink.cmp/lua"),
+				vim.fn.expand("$XDG_DATA_HOME/nvim/lazy/diffview.nvim/lua"),
+				vim.fn.expand("$XDG_DATA_HOME/nvim/lazy/fzf-lua/lua"),
+				vim.fn.expand("$XDG_DATA_HOME/nvim/lazy/lazy.nvim/lua"),
+				vim.fn.expand("$XDG_DATA_HOME/nvim/lazy/nvim-dap-go/lua"),
+				vim.fn.expand("$XDG_DATA_HOME/nvim/lazy/nvim-dap-ui/lua"),
+				vim.fn.expand("$XDG_DATA_HOME/nvim/lazy/nvim-dap/lua"),
+				vim.fn.expand("$XDG_DATA_HOME/nvim/lazy/nvim-treesitter/lua"),
+				vim.fn.expand("$XDG_DATA_HOME/nvim/lazy/plenary.nvim/lua"),
 			}
 		}
 	},
@@ -102,8 +130,7 @@ lspconfig.html.setup({
 	end,
 })
 
--- setup plugins
-require("diffview").setup()
+vim.lsp.enable({ "lua_ls", "ruff", "gopls", "templ", "html", "tailwindcss", "prismals", "clangd", "ty", "rust_analyzer" }) -- note: pyright currently disabled in favour of ty
 
 require("dotenv").setup({
 	overrides = { ".env", ".local.env", ".env.local", ".local.mine.env", ".env.mine" },
@@ -129,13 +156,25 @@ if not supermaven_api.is_running() then
 end
 
 require("nvim-treesitter").setup({
-	sync_install = false,
-	auto_install = true,
-	highlight = { enable = true },
-	additional_vim_regex_highlighting = false,
 })
--- TODO: only enable for go and templ files
-require("tree-sitter-templ").setup()
+
+local function register_templ_parser()
+	require('nvim-treesitter.parsers').templ = {
+		install_info = {
+			url = 'https://github.com/vrischmann/tree-sitter-templ',
+			files = { 'src/parser.c', 'src/scanner.c' },
+		},
+	}
+end
+
+register_templ_parser()
+
+vim.api.nvim_create_autocmd('User', {
+	pattern = 'TSUpdate',
+	callback = register_templ_parser,
+})
+
+vim.filetype.add({ extension = { templ = 'templ' } })
 g.vrc_set_default_mappings = 0
 g.vrc_response_default_content_type = "application/json"
 g.vrc_output_buffer_name = "_OUTPUT.json"
@@ -161,7 +200,7 @@ vim.keymap.set("n", "<leader>gt", [[:split<CR><C-w>j:resize 10<CR>:terminal<CR>]
 vim.keymap.set('t', '<Esc><Esc>', [[<C-\><C-n>]], { noremap = true, silent = true, desc = "Exit terminal mode" })
 vim.keymap.set('n', '<leader>td', '<cmd>Todos<cr>', { desc = "Search TODOs" })
 vim.keymap.set("n", "<leader>cf", "<cmd>:let @+ = expand('%')<CR>", { desc = "Copy current file path" })
-vim.keymap.set("n", "<leader>pl", "<cmd>Pipeline open<CR>", { desc = "Inspect Github Actions" })
+-- vim.keymap.set("n", "<leader>pl", "<cmd>Pipeline open<CR>", { desc = "Inspect Github Actions" })
 vim.keymap.set("n", "<leader>ws", Clean_whitespace_lines,
 	{ desc = "Clean whitespace: remove trailing & whitespace-only lines" })
 
@@ -214,6 +253,3 @@ vim.keymap.set("n", "<leader>Gd", ":Gdiff<CR>", { desc = "Git diff" })
 vim.keymap.set("n", "<leader>Gp", ":Git pull<CR>", { desc = "Git pull" })
 vim.keymap.set("n", "<leader>GP", ":Git push<CR>", { desc = "Git push" })
 vim.keymap.set("n", "<leader>GO", ":Git push -u origin<CR>", { desc = "Git push to origin" })
-
--- keybinds (diffview)
-vim.keymap.set("n", "<leader>dv", ":DiffviewOpen HEAD...origin/main<CR>", { desc = "Open diffview" })
