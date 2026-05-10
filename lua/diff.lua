@@ -32,6 +32,7 @@ require("diffview").setup({
 			position = "left",
 			width = 36,
 		},
+		show_root_path = false,
 	},
 })
 

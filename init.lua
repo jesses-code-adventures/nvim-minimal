@@ -66,7 +66,6 @@ vim.pack.add {
 	{ src = "https://github.com/folke/trouble.nvim" },
 	{ src = "https://github.com/nvim-neotest/neotest",              data = {} },
 	-- { src = vim.fn.expand("~/coding/personal/pipeline.nvim") },
-	{ src = "https://github.com/dlyongemallo/diffview.nvim" },
 	{ src = "https://github.com/nvim-tree/nvim-web-devicons" },
 }
 
@@ -76,24 +75,33 @@ vim.cmd("hi StatusLineNC guibg=NONE")
 
 require('fzf-lua').register_ui_select()
 
-local dev_diffview_pr = false
+local dev_diffview = true
+if dev_diffview then
+	vim.opt.runtimepath:prepend(vim.fn.expand("~/coding/contrib/diffview.nvim"))
+else
+	vim.pack.add({ { src = "https://github.com/dlyongemallo/diffview.nvim" } })
+end
+
+local dev_diffview_pr = true
 if dev_diffview_pr then
 	vim.opt.runtimepath:prepend(vim.fn.expand("~/coding/personal/diffview-pr.nvim"))
 else
-	vim.pack.add({ src = "https://github.com/jesses-code-adventures/diffview-pr.nvim" })
+	vim.pack.add({ { src = "https://github.com/jesses-code-adventures/diffview-pr.nvim" } })
 end
 
-require("dv")
+local dev_pipeline = false
+if dev_pipeline then
+	vim.opt.runtimepath:prepend(vim.fn.expand("~/coding/personal/pipeline.nvim"))
+else
+	vim.pack.add({ { src = "https://github.com/jesses-code-adventures/pipeline.nvim" } })
+end
 
--- lsp & diagnostics
+require("diff")
 require("diagnostics")
 require("lsp")
 require("utils")
 require("custom_commands")
 require("autocmds")
-
--- Load local plugins that are in development
--- Force_reload_local_plugin()
 
 local lspconfig = require("lspconfig")
 
@@ -103,6 +111,10 @@ lspconfig.lua_ls.setup({
 			runtime = { version = "Lua 5.1" },
 			diagnostics = {
 				globals = { "bit", "vim", "it", "describe", "before_each", "after_each", "os", "require" },
+			},
+			workspace = {
+				library = vim.api.nvim_get_runtime_file("", true),
+				checkThirdParty = false,
 			},
 			library = {
 				vim.fn.expand("$VIMRUNTIME/lua"),
