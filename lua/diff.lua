@@ -1,5 +1,5 @@
 require("diffview_pr").setup({
-	comment_style = "minimal",
+	comment_style = "expanded",
 })
 
 require("diffview").setup({
