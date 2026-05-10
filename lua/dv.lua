@@ -1,13 +1,16 @@
-require("diffview_pr_comment").setup({
+require("diffview_pr").setup({
 	comment_style = "minimal",
 })
 
 require("diffview").setup({
 	enhanced_diff_hl = true,
 	use_icons = true,
+	default_args = {
+		DiffviewOpen = { "--untracked-files=all" },
+	},
 	hooks = {
 		diff_buf_win_enter = function(bufnr, winid, ctx)
-			require("diffview_pr_comment").diff_buf_win_enter(bufnr, winid, ctx)
+			require("diffview_pr").diff_buf_win_enter(bufnr, winid, ctx)
 
 			local is_old_side = ctx.symbol == "a"
 			local add_hl = is_old_side and "DiffviewDiffAddAsDelete" or "DiffviewDiffAdd"

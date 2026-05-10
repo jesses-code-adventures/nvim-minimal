@@ -31,33 +31,6 @@ vim.api.nvim_create_user_command('Dc', function()
 	vim.cmd('DiffviewClose')
 end, { desc = 'Close Diffview', nargs = 0 })
 
--- vim.api.nvim_create_user_command('DiffviewPRComment', function(args)
--- 	local ok, pr = pcall(require, 'diffview_pr_comment')
--- 	if not ok then
--- 		vim.notify('diffview-pr.nvim is not available', vim.log.levels.WARN)
--- 		return
--- 	end
--- 	pr.open(args.line1, args.line2)
--- end, { desc = 'Create a GitHub PR comment from a Diffview selection', range = true })
---
--- vim.api.nvim_create_user_command('DiffviewPRCommentsRefresh', function()
--- 	local ok, pr = pcall(require, 'diffview_pr_comment')
--- 	if not ok then
--- 		vim.notify('diffview-pr.nvim is not available', vim.log.levels.WARN)
--- 		return
--- 	end
--- 	pr.refresh()
--- end, { desc = 'Refresh GitHub PR comments in Diffview', nargs = 0 })
---
--- vim.api.nvim_create_user_command('DiffviewPRDebug', function()
--- 	local ok, pr = pcall(require, 'diffview_pr_comment')
--- 	if not ok then
--- 		vim.notify('diffview-pr.nvim is not available', vim.log.levels.WARN)
--- 		return
--- 	end
--- 	pr.debug_state()
--- end, { desc = 'Print Diffview PR plugin state', nargs = 0 })
-
 local function github_diff_highlights()
 	local highlights = {
 		DiffAdd = { bg = "#1f3d2a", fg = "#b7dfb9" },
