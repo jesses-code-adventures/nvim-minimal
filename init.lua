@@ -59,13 +59,11 @@ vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]], { desc = "Yank to system clip
 vim.keymap.set("n", "<leader>yy", [["+Y]], { desc = "Yank line to system clipboard" })
 vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Scroll down and center" })
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Scroll up and center" })
--- vim.keymap.set("n", "<leader>gt", [[:vsplit<CR><C-w>L:vertical resize -60<CR>:terminal<CR>]], { desc = "Open terminal in split pane" })
 vim.keymap.set("n", "<leader>gt", [[:split<CR><C-w>j:resize 10<CR>:terminal<CR>]],
 	{ desc = "Open terminal in split pane" })
 vim.keymap.set('t', '<Esc><Esc>', [[<C-\><C-n>]], { noremap = true, silent = true, desc = "Exit terminal mode" })
 vim.keymap.set('n', '<leader>td', '<cmd>Todos<cr>', { desc = "Search TODOs" })
 vim.keymap.set("n", "<leader>cf", "<cmd>:let @+ = expand('%')<CR>", { desc = "Copy current file path" })
--- vim.keymap.set("n", "<leader>pl", "<cmd>Pipeline open<CR>", { desc = "Inspect Github Actions" })
 vim.keymap.set("n", "<leader>ws", Clean_whitespace_lines,
 	{ desc = "Clean whitespace: remove trailing & whitespace-only lines" })
 
