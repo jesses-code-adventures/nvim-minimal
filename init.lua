@@ -4,24 +4,6 @@ local g = vim.g
 g.mapleader = " "
 g.omni_sql_default_compl_type = 'syntax'
 
-do
-	local orig_deprecate = vim.deprecate
-	vim.deprecate = function(name, alt, version, plugin, backtrace)
-		if name and name:match("client%.stop") then
-			local callsite = debug.traceback("", 2)
-			local bt = backtrace and ("\nvim.deprecate backtrace:\n" .. tostring(backtrace)) or ""
-			vim.schedule(function()
-				vim.notify(
-					("DEPRECATION: %s -> %s\n%s%s"):format(name, alt or "?", callsite, bt),
-					vim.log.levels.WARN
-				)
-			end)
-		end
-
-		return orig_deprecate(name, alt, version, plugin, backtrace)
-	end
-end
-
 -- global options
 o.wrap = false
 o.nu = true
@@ -44,111 +26,19 @@ o.termguicolors = true
 -- completion popup behavior
 vim.opt.completeopt = { "menuone", "noselect" }
 
--- get plugins
-vim.pack.add {
-	{ src = "https://github.com/nvim-lua/plenary.nvim" }, -- depended on by neotest
-	{ src = "https://github.com/neovim/nvim-lspconfig" },
-	{ src = "https://github.com/nvim-treesitter/nvim-treesitter",   version = "main" },
-	{ src = "https://github.com/NLKNguyen/papercolor-theme" },
-	{ src = "https://github.com/stevearc/oil.nvim" },
-	{ src = "https://github.com/ibhagwan/fzf-lua" },
-	{ src = "https://github.com/lewis6991/gitsigns.nvim" },
-	{ src = "https://github.com/tpope/vim-fugitive" },
-	{ src = "https://github.com/supermaven-inc/supermaven-nvim" },
-	{ src = "https://github.com/vrischmann/tree-sitter-templ" },
-	{ src = "https://github.com/diepm/vim-rest-console" },
-	{ src = "https://github.com/jesses-code-adventures/dotenv.nvim" },
-	{ src = "https://github.com/timwmillard/uuid.nvim" },
-	{ src = "https://github.com/nvim-neotest/nvim-nio" },        -- depended on by neotest
-	{ src = "https://github.com/antoinemadec/FixCursorHold.nvim" }, -- depended on by neotest
-	{ src = "https://github.com/sbdchd/neoformat" },
-	{ src = "https://github.com/fredrikaverpil/neotest-golang" },
-	{ src = "https://github.com/folke/trouble.nvim" },
-	{ src = "https://github.com/nvim-neotest/neotest",              data = {} },
-	-- { src = vim.fn.expand("~/coding/personal/pipeline.nvim") },
-	{ src = "https://github.com/nvim-tree/nvim-web-devicons" },
-}
+require("utils")
+require("autocmds")
+require("diagnostics")
+require("lsp")
+require("plugins")
 
 vim.cmd("colorscheme PaperColor")
 vim.cmd("hi statusline guibg=NONE")
 vim.cmd("hi StatusLineNC guibg=NONE")
 
-require('fzf-lua').register_ui_select()
-
-local dev_diffview = true
-if dev_diffview then
-	vim.opt.runtimepath:prepend(vim.fn.expand("~/coding/contrib/diffview.nvim"))
-else
-	vim.pack.add({ { src = "https://github.com/dlyongemallo/diffview.nvim" } })
-end
-
-local dev_diffview_pr = true
-if dev_diffview_pr then
-	vim.opt.runtimepath:prepend(vim.fn.expand("~/coding/personal/diffview-pr.nvim"))
-else
-	vim.pack.add({ { src = "https://github.com/jesses-code-adventures/diffview-pr.nvim" } })
-end
-
-local dev_pipeline = false
-if dev_pipeline then
-	vim.opt.runtimepath:prepend(vim.fn.expand("~/coding/personal/pipeline.nvim"))
-else
-	vim.pack.add({ { src = "https://github.com/jesses-code-adventures/pipeline.nvim" } })
-end
-
+require("plugin_dev")
 require("diff")
-require("diagnostics")
-require("lsp")
-require("utils")
 require("custom_commands")
-require("autocmds")
-
-local lspconfig = require("lspconfig")
-
-lspconfig.lua_ls.setup({
-	settings = {
-		Lua = {
-			runtime = { version = "Lua 5.1" },
-			diagnostics = {
-				globals = { "bit", "vim", "it", "describe", "before_each", "after_each", "os", "require" },
-			},
-			workspace = {
-				-- library = vim.api.nvim_get_runtime_file("", true),
-				library = {
-					vim.fn.expand("$VIMRUNTIME/lua"),
-					vim.fn.expand("lua/lsp.lua"),
-					vim.fn.expand("$XDG_DATA_HOME/nvim/lazy/blink.cmp/lua"),
-					vim.fn.expand("$XDG_DATA_HOME/nvim/lazy/diffview.nvim/lua"),
-					vim.fn.expand("$XDG_DATA_HOME/nvim/lazy/fzf-lua/lua"),
-					vim.fn.expand("$XDG_DATA_HOME/nvim/lazy/lazy.nvim/lua"),
-					vim.fn.expand("$XDG_DATA_HOME/nvim/lazy/nvim-dap-go/lua"),
-					vim.fn.expand("$XDG_DATA_HOME/nvim/lazy/nvim-dap-ui/lua"),
-					vim.fn.expand("$XDG_DATA_HOME/nvim/lazy/nvim-dap/lua"),
-					vim.fn.expand("$XDG_DATA_HOME/nvim/lazy/nvim-treesitter/lua"),
-					vim.fn.expand("$XDG_DATA_HOME/nvim/lazy/plenary.nvim/lua"),
-				},
-				checkThirdParty = false,
-			},
-		}
-	},
-})
-
-lspconfig.vtsls.setup({
-	filetypes = { "typescript", "typescriptreact", "vue", "javascript", "javascriptreact" },
-})
-
-lspconfig.html.setup({
-	filetypes = { "html", "templ", "vue" },
-	on_attach = function(client, bufnr)
-		-- Only disable formatting for templ files, keep it for html files
-		if vim.bo[bufnr].filetype == "templ" then
-			client.server_capabilities.documentFormattingProvider = false
-			client.server_capabilities.documentRangeFormattingProvider = false
-		end
-	end,
-})
-
-vim.lsp.enable({ "lua_ls", "ruff", "gopls", "templ", "html", "tailwindcss", "prismals", "clangd", "ty", "rust_analyzer" }) -- note: pyright currently disabled in favour of ty
 
 require("dotenv").setup({
 	overrides = { ".env", ".local.env", ".env.local", ".local.mine.env", ".env.mine" },
