@@ -20,3 +20,46 @@ vim.pack.add {
 	{ src = "https://github.com/nvim-neotest/neotest",              data = {} },
 	{ src = "https://github.com/nvim-tree/nvim-web-devicons" },
 }
+
+require("dotenv").setup({
+	overrides = { ".env", ".local.env", ".env.local", ".local.mine.env", ".env.mine" },
+})
+require("oil").setup({ view_options = { show_hidden = true } })
+require("gitsigns").setup({
+	signs = {
+		add = { text = "+" },
+		change = { text = "~" },
+		topdelete = { text = '‾' },
+		changedelete = { text = "~" },
+	}
+})
+
+local supermaven_api = require("supermaven-nvim.api")
+if not supermaven_api.is_running() then
+	require("supermaven-nvim").setup({
+		keymaps = {
+			accept_suggestion = "<C-Space>",
+			clear_suggestion = "<C-x>",
+		},
+	})
+end
+
+require("nvim-treesitter").setup({
+})
+
+local function register_templ_parser()
+	require('nvim-treesitter.parsers').templ = {
+		install_info = {
+			url = 'https://github.com/vrischmann/tree-sitter-templ',
+			files = { 'src/parser.c', 'src/scanner.c' },
+		},
+	}
+end
+
+register_templ_parser()
+
+vim.api.nvim_create_autocmd('User', {
+	pattern = 'TSUpdate',
+	callback = register_templ_parser,
+})
+

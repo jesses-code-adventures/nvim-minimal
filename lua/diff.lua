@@ -1,10 +1,11 @@
 require("diffview_pr").setup({
-	comment_style = "expanded",
+	comment_style = "minimal",
 })
 
 require("diffview").setup({
 	enhanced_diff_hl = true,
 	use_icons = true,
+	show_root_path = false,
 	default_args = {
 		DiffviewOpen = { "--untracked-files=all" },
 	},
@@ -32,7 +33,6 @@ require("diffview").setup({
 			position = "left",
 			width = 36,
 		},
-		show_root_path = false,
 	},
 })
 
