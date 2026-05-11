@@ -1,21 +1,15 @@
-local dev_diffview = false
-if dev_diffview then
-	vim.opt.runtimepath:prepend(vim.fn.expand("~/coding/contrib/diffview.nvim"))
-else
-	vim.pack.add({ { src = "https://github.com/dlyongemallo/diffview.nvim", version = "main" } })
+---@param dev boolean
+---@param dir string
+---@param url string
+---@param version string?
+local function handle_dev_plugin(dev, dir, url, version)
+	if dev and vim.fn.isdirectory(dir) == 1 then
+		vim.opt.runtimepath:prepend(vim.fn.expand(dir))
+	else
+		vim.pack.add({ { src = url, version = version } })
+	end
 end
 
-local dev_diffview_pr = true
-if dev_diffview_pr then
-	vim.opt.runtimepath:prepend(vim.fn.expand("~/coding/personal/diffview-pr.nvim"))
-else
-	vim.pack.add({ { src = "https://github.com/jesses-code-adventures/diffview-pr.nvim" } })
-end
-
-local dev_pipeline = false
-if dev_pipeline then
-	vim.opt.runtimepath:prepend(vim.fn.expand("~/coding/personal/pipeline.nvim"))
-else
-	vim.pack.add({ { src = "https://github.com/jesses-code-adventures/pipeline.nvim" } })
-end
-
+handle_dev_plugin(false, "~/coding/contrib/diffview.nvim", "https://github.com/dlyongemallo/diffview.nvim", "main")
+handle_dev_plugin(true, "~/coding/personal/diffview-pr.nvim", "https://github.com/dlyongemallo/diffview.nvim")
+handle_dev_plugin(false, "~/coding/personal/pipeline.nvim", "https://github.com/jesses-code-adventures/pipeline.nvim")
