@@ -18,6 +18,13 @@ vim.api.nvim_create_autocmd('FileType', {
 	end,
 })
 
+vim.api.nvim_create_autocmd('FileType', {
+	pattern = { 'markdown' },
+	callback = function(args)
+		vim.treesitter.stop(args.buf)
+	end,
+})
+
 vim.cmd([[
   au BufNewFile,BufRead *.env.* set filetype=sh
 ]])

@@ -48,7 +48,7 @@ vim.opt.completeopt = { "menuone", "noselect" }
 vim.pack.add {
 	{ src = "https://github.com/nvim-lua/plenary.nvim" }, -- depended on by neotest
 	{ src = "https://github.com/neovim/nvim-lspconfig" },
-	{ src = "https://github.com/nvim-treesitter/nvim-treesitter",   version = "main" },
+	{ src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main" },
 	{ src = "https://github.com/NLKNguyen/papercolor-theme" },
 	{ src = "https://github.com/stevearc/oil.nvim" },
 	{ src = "https://github.com/ibhagwan/fzf-lua" },
@@ -75,14 +75,14 @@ vim.cmd("hi StatusLineNC guibg=NONE")
 
 require('fzf-lua').register_ui_select()
 
-local dev_diffview = true
+local dev_diffview = false
 if dev_diffview then
 	vim.opt.runtimepath:prepend(vim.fn.expand("~/coding/contrib/diffview.nvim"))
 else
 	vim.pack.add({ { src = "https://github.com/dlyongemallo/diffview.nvim" } })
 end
 
-local dev_diffview_pr = true
+local dev_diffview_pr = false
 if dev_diffview_pr then
 	vim.opt.runtimepath:prepend(vim.fn.expand("~/coding/personal/diffview-pr.nvim"))
 else
@@ -173,7 +173,11 @@ if not supermaven_api.is_running() then
 	})
 end
 
-require("nvim-treesitter").setup({
+require("nvim-treesitter.configs").setup({
+	highlight = {
+		enable = true,
+		disable = { "markdown", "markdown_inline" },
+	},
 })
 
 local function register_templ_parser()
