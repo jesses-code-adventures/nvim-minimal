@@ -33,6 +33,10 @@
       "rev": "c9a2deb7bf2d8deaf56a229ff9c7bfeffa8d7d53",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
+    "ghlua": {
+      "rev": "358d0ef7da3b44f36e5055127fda5452c90bce38",
+      "src": "https://github.com/kitlangton/ghui"
+    },
     "gitsigns.nvim": {
       "rev": "b01433169be710d6c69f7b4ee264d9670698b831",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
@@ -52,6 +56,10 @@
     "llm.nvim": {
       "rev": "4d6755379a6de2e090ef0c7add84fa2ee385152f",
       "src": "https://github.com/jesses-code-adventures/llm.nvim"
+    },
+    "localplug": {
+      "rev": "252338de307f9da0c658649a48dbae9a39f830f7",
+      "src": "/Users/jesse/.dotfiles/config/test"
     },
     "neoformat": {
       "rev": "2b11fb9fa383636de5de9ecc7c989436c4e0f9d1",
@@ -105,6 +113,10 @@
     "supermaven-nvim": {
       "rev": "07d20fce48a5629686aefb0a7cd4b25e33947d50",
       "src": "https://github.com/supermaven-inc/supermaven-nvim"
+    },
+    "test": {
+      "rev": "252338de307f9da0c658649a48dbae9a39f830f7",
+      "src": "/Users/jesse/.dotfiles/config/test"
     },
     "tree-sitter-templ": {
       "rev": "47594c5cbef941e6a3ccf4ddb934a68cf4c68075",
