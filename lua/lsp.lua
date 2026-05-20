@@ -152,7 +152,7 @@ end
 
 local lspconfig = require("lspconfig")
 
-lspconfig.lua_ls.setup({
+vim.lsp.config("lua_ls", {
 	settings = {
 		Lua = {
 			runtime = { version = "Lua 5.1" },
@@ -180,11 +180,11 @@ lspconfig.lua_ls.setup({
 	},
 })
 
-lspconfig.vtsls.setup({
+vim.lsp.config("vtsls", {
 	filetypes = { "typescript", "typescriptreact", "vue", "javascript", "javascriptreact" },
 })
 
-lspconfig.html.setup({
+vim.lsp.config("html", {
 	filetypes = { "html", "templ", "vue" },
 	on_attach = function(client, bufnr)
 		-- Only disable formatting for templ files, keep it for html files
