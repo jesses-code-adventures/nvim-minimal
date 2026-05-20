@@ -18,7 +18,8 @@
     },
     "diffview.nvim": {
       "rev": "4516612fe98ff56ae0415a259ff6361a89419b0a",
-      "src": "https://github.com/dlyongemallo/diffview.nvim"
+      "src": "https://github.com/dlyongemallo/diffview.nvim",
+      "version": "'main'"
     },
     "dotenv.nvim": {
       "rev": "e43aedfa06fb1921b7b23697a1e4c93363967f35",
