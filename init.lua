@@ -75,14 +75,14 @@ vim.cmd("hi StatusLineNC guibg=NONE")
 
 require('fzf-lua').register_ui_select()
 
-local dev_diffview = true
+local dev_diffview = false
 if dev_diffview then
 	vim.opt.runtimepath:prepend(vim.fn.expand("~/coding/contrib/diffview.nvim"))
 else
 	vim.pack.add({ { src = "https://github.com/dlyongemallo/diffview.nvim" } })
 end
 
-local dev_diffview_pr = true
+local dev_diffview_pr = false
 if dev_diffview_pr then
 	vim.opt.runtimepath:prepend(vim.fn.expand("~/coding/personal/diffview-pr.nvim"))
 else
@@ -103,9 +103,7 @@ require("utils")
 require("custom_commands")
 require("autocmds")
 
-local lspconfig = require("lspconfig")
-
-lspconfig.lua_ls.setup({
+vim.lsp.config("lua_ls", {
 	settings = {
 		Lua = {
 			runtime = { version = "Lua 5.1" },
@@ -133,11 +131,11 @@ lspconfig.lua_ls.setup({
 	},
 })
 
-lspconfig.vtsls.setup({
+vim.lsp.config("vtsls", {
 	filetypes = { "typescript", "typescriptreact", "vue", "javascript", "javascriptreact" },
 })
 
-lspconfig.html.setup({
+vim.lsp.config("html", {
 	filetypes = { "html", "templ", "vue" },
 	on_attach = function(client, bufnr)
 		-- Only disable formatting for templ files, keep it for html files
