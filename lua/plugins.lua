@@ -63,3 +63,4 @@ vim.api.nvim_create_autocmd('User', {
 	callback = register_templ_parser,
 })
 
+vim.filetype.add({ extension = { templ = 'templ' } })

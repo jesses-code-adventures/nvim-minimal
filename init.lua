@@ -39,49 +39,6 @@ vim.cmd("colorscheme PaperColor")
 vim.cmd("hi statusline guibg=NONE")
 vim.cmd("hi StatusLineNC guibg=NONE")
 
-require("dotenv").setup({
-	overrides = { ".env", ".local.env", ".env.local", ".local.mine.env", ".env.mine" },
-})
-require("oil").setup({ view_options = { show_hidden = true } })
-require("gitsigns").setup({
-	signs = {
-		add = { text = "+" },
-		change = { text = "~" },
-		topdelete = { text = '‾' },
-		changedelete = { text = "~" },
-	}
-})
-
-local supermaven_api = require("supermaven-nvim.api")
-if not supermaven_api.is_running() then
-	require("supermaven-nvim").setup({
-		keymaps = {
-			accept_suggestion = "<C-Space>",
-			clear_suggestion = "<C-x>",
-		},
-	})
-end
-
-require("nvim-treesitter").setup({
-})
-
-local function register_templ_parser()
-	require('nvim-treesitter.parsers').templ = {
-		install_info = {
-			url = 'https://github.com/vrischmann/tree-sitter-templ',
-			files = { 'src/parser.c', 'src/scanner.c' },
-		},
-	}
-end
-
-register_templ_parser()
-
-vim.api.nvim_create_autocmd('User', {
-	pattern = 'TSUpdate',
-	callback = register_templ_parser,
-})
-
-vim.filetype.add({ extension = { templ = 'templ' } })
 g.vrc_set_default_mappings = 0
 g.vrc_response_default_content_type = "application/json"
 g.vrc_output_buffer_name = "_OUTPUT.json"
