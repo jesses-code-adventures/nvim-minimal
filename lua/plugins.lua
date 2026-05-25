@@ -25,6 +25,15 @@ require("dotenv").setup({
 	overrides = { ".env", ".local.env", ".env.local", ".local.mine.env", ".env.mine" },
 })
 require("oil").setup({ view_options = { show_hidden = true } })
+require("fzf-lua").setup({
+	previewers = {
+		builtin = {
+			treesitter = {
+				disabled = { "markdown" },
+			},
+		},
+	},
+})
 require("gitsigns").setup({
 	signs = {
 		add = { text = "+" },
@@ -44,9 +53,6 @@ if not supermaven_api.is_running() then
 	})
 end
 
-require("nvim-treesitter").setup({
-})
-
 local function register_templ_parser()
 	require('nvim-treesitter.parsers').templ = {
 		install_info = {
@@ -57,6 +63,8 @@ local function register_templ_parser()
 end
 
 register_templ_parser()
+
+require("nvim-treesitter").setup()
 
 vim.api.nvim_create_autocmd('User', {
 	pattern = 'TSUpdate',

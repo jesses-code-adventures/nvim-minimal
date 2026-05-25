@@ -12,9 +12,9 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 vim.api.nvim_create_autocmd('FileType', {
-	pattern = { 'templ', 'prisma' },
+	pattern = { 'go', 'lua', 'templ', 'prisma', 'javascript', 'css', 'markdown', 'markdown_inline' },
 	callback = function()
-		vim.treesitter.start()
+		pcall(vim.treesitter.start)
 	end,
 })
 
