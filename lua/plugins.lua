@@ -33,6 +33,9 @@ require("fzf-lua").setup({
 			},
 		},
 	},
+	winopts = {
+		treesitter = { enabled = false },
+	},
 })
 require("gitsigns").setup({
 	signs = {

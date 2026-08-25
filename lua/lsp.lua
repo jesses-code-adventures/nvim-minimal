@@ -150,8 +150,6 @@ vim.lsp.handlers[methods.client_registerCapability] = function(err, res, ctx)
 	return register_capability(err, res, ctx)
 end
 
-local lspconfig = require("lspconfig")
-
 vim.lsp.config("lua_ls", {
 	settings = {
 		Lua = {
@@ -193,6 +191,39 @@ vim.lsp.config("html", {
 			client.server_capabilities.documentRangeFormattingProvider = false
 		end
 	end,
+})
+
+vim.lsp.config("tailwindcss", {
+    root_dir = function(bufnr, on_dir)
+        local root = vim.fs.root(bufnr, {
+            "tailwind.config.js",
+            "tailwind.config.cjs",
+            "tailwind.config.mjs",
+            "tailwind.config.ts",
+            "postcss.config.js",
+            "package.json",
+        })
+
+        if not root then
+            return
+        end
+
+        local has_tailwind_config = vim.fs.find({
+            "tailwind.config.js",
+            "tailwind.config.cjs",
+            "tailwind.config.mjs",
+            "tailwind.config.ts",
+        }, { path = root, upward = false })[1]
+
+        local package_json = vim.fs.find("package.json", { path = root, upward = false })[1]
+        local has_tailwind_dep = package_json
+            and vim.fn.readfile(package_json)
+            and table.concat(vim.fn.readfile(package_json), "\n"):find("tailwindcss", 1, true)
+
+        if has_tailwind_config or has_tailwind_dep then
+            on_dir(root)
+        end
+    end,
 })
 
 vim.lsp.enable({ "lua_ls", "ruff", "gopls", "templ", "html", "tailwindcss", "prismals", "clangd", "ty", "rust_analyzer" }) -- note: pyright currently disabled in favour of ty

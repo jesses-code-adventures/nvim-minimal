@@ -118,6 +118,10 @@
       "rev": "252338de307f9da0c658649a48dbae9a39f830f7",
       "src": "/Users/jesse/.dotfiles/config/test"
     },
+    "tmux-agent.nvim": {
+      "rev": "0df9fcf24c33b0da21e6ecc99e3367c63e90a80b",
+      "src": "https://github.com/timwmillard/tmux-agent.nvim"
+    },
     "tree-sitter-templ": {
       "rev": "47594c5cbef941e6a3ccf4ddb934a68cf4c68075",
       "src": "https://github.com/vrischmann/tree-sitter-templ"
