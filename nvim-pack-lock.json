@@ -57,10 +57,6 @@
       "rev": "4d6755379a6de2e090ef0c7add84fa2ee385152f",
       "src": "https://github.com/jesses-code-adventures/llm.nvim"
     },
-    "localplug": {
-      "rev": "252338de307f9da0c658649a48dbae9a39f830f7",
-      "src": "/Users/jesse/.dotfiles/config/test"
-    },
     "neoformat": {
       "rev": "2b11fb9fa383636de5de9ecc7c989436c4e0f9d1",
       "src": "https://github.com/sbdchd/neoformat"
@@ -113,10 +109,6 @@
     "supermaven-nvim": {
       "rev": "07d20fce48a5629686aefb0a7cd4b25e33947d50",
       "src": "https://github.com/supermaven-inc/supermaven-nvim"
-    },
-    "test": {
-      "rev": "252338de307f9da0c658649a48dbae9a39f830f7",
-      "src": "/Users/jesse/.dotfiles/config/test"
     },
     "tmux-agent.nvim": {
       "rev": "0df9fcf24c33b0da21e6ecc99e3367c63e90a80b",
